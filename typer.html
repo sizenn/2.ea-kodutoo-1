@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Typer</title>
+	<script src="TYPER.js"></script>
+  <script src="Word.js"></script>
+	<link rel="stylesheet" href="style.css">
+</head>
+<body>
+	<main role="main">
+		<div id="index-view">
+			<h1>Tere tulemast TYPER mängu</h1>
+			<h2>
+				Kuidas mängida:
+			</h2>
+			<p>
+				Lehe keskele kuvatakse sõna, mida tuleb kirjutada. Mida kiiremini kirjutad seda rohkem punkte saad.
+			</p>
+			<p>
+				Kui mõni täht läheb valesti, siis kaotad punkte.
+			</p>
+
+			<input type="text" name="name" id="name"><br>
+			<input type="button" onclick="location.href='#game-view'; typerGame.startGame()"; value="Alusta mängu" />
+		</div>
+		<div id="game-view">
+			<canvas id="canvas2"></canvas>
+			<canvas id="canvas"></canvas>
+		</div>
+	</main>
+</body>
+</html>
