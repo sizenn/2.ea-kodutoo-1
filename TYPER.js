@@ -68,6 +68,7 @@ TYPER.prototype = {
 		this.canvas.style.width = this.WIDTH + 'px';
 		this.canvas.style.height = this.HEIGHT + 'px';
 
+    window.addEventListener('keypress', this.keyPressed.bind(this));
 
 		//resolutsioon
 		// kui retina ekraan, siis võib ja peaks olema 2 korda suurem
@@ -93,8 +94,19 @@ TYPER.prototype = {
   startGame: function(){
     this.timerMultiplier = 1;
     this.tickSpeed = 500;
+    this.typingTotalTime = 0;
+    this.typingStartTime = 0;
+    this.typingTotalLetters = 0;
+    this.typingAvgTime = 0;
+    this.currentScore = 0;
+    this.words = []; // kõik sõnad
+    this.word = null; // preagu arvamisel olev sõna
+    this.word_min_length = 3;
+    this.guessed_words = 0; // arvatud sõnade arv
     this.loadPlayerData();
-		this.loadWords();
+    this.loadWords();
+    //this.start();
+    //this.timer();
   },
 
 	loadPlayerData: function(){
@@ -108,7 +120,7 @@ TYPER.prototype = {
 
 		// Mänigja objektis muudame nime
 		this.player = new Player(p_name); // player =>>> {name:"Romil", score: 0}
-    console.log(this.player.name+"nimi kuvatud");
+    console.log(this.player.name+" nimi kuvatud");
 	},
 
 	loadWords: function(){
@@ -145,9 +157,8 @@ TYPER.prototype = {
 				// küsime mängija andmed
 
 
-				// kõik sõnad olemas, alustame mänguga
-
-				typerGame.start();
+        // kõik sõnad olemas, alustame mänguga
+        typerGame.start();
         typerGame.timer();
 			}
 		};
@@ -245,26 +256,22 @@ TYPER.prototype = {
 
         //joonista sõna
 		this.word.Draw();
-
-		// Kuulame klahvivajutusi
-		window.addEventListener('keypress', this.keyPressed.bind(this));
-
 	},
 
-    generateWord: function(){
+  generateWord: function(){
 
-        // kui pikk peab sõna tulema, + min pikkus + äraarvatud sõnade arvul jääk 5 jagamisel
-        // iga viie sõna tagant suureneb sõna pikkus ühe võrra
-        var generated_word_length =  this.word_min_length + parseInt(this.guessed_words/5);
+    // kui pikk peab sõna tulema, + min pikkus + äraarvatud sõnade arvul jääk 5 jagamisel
+    // iga viie sõna tagant suureneb sõna pikkus ühe võrra
+    var generated_word_length =  this.word_min_length + parseInt(this.guessed_words/5);
+    console.log(generated_word_length);
+    // Saan suvalise arvu vahemikus 0 - (massiivi pikkus -1)
+    var random_index = (Math.random()*(this.words[generated_word_length].length-1)).toFixed();
 
-    	// Saan suvalise arvu vahemikus 0 - (massiivi pikkus -1)
-    	var random_index = (Math.random()*(this.words[generated_word_length].length-1)).toFixed();
-
-        // random sõna, mille salvestame siia algseks
-    	var word = this.words[generated_word_length][random_index];
-    	// Word on defineeritud eraldi Word.js failis
-        this.word = new Word(word, this.canvas, this.ctx);
-    },
+      // random sõna, mille salvestame siia algseks
+    var wordz = this.words[generated_word_length][random_index];
+    // Word on defineeritud eraldi Word.js failis
+    this.word = new Word(wordz, this.canvas, this.ctx);
+  },
 
 	keyPressed: function(event){
 
@@ -276,6 +283,7 @@ TYPER.prototype = {
 		// Võrdlen kas meie kirjutatud täht on sama mis järele jäänud sõna esimene
 		//console.log(this.word);
 		if(letter === this.word.left.charAt(0)){
+      console.log(this.word);
       this.timerMultiplier += 0.01;
       this.currentScore += 1;
 			// Võtame ühe tähe maha
@@ -283,7 +291,7 @@ TYPER.prototype = {
 
 			// kas sõna sai otsa, kui jah - loosite uue sõna
 
-			if(this.word.left.length === 1){
+			if(this.word.left.length === 0){
 
 
         this.tickSpeed = 500 - (parseInt(this.guessed_words/5)*30);
@@ -300,6 +308,7 @@ TYPER.prototype = {
 			//joonistan uuesti
 			this.word.Draw();
 		}else{
+      console.log(this.word);
       this.timerMultiplier -= 0.02;
       this.currentScore -= 2;
       this.screenFlash();
