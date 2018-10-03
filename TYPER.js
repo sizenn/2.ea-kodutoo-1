@@ -211,35 +211,45 @@ TYPER.prototype = {
     }
     if(localStorage.players){
       this.players = JSON.parse(localStorage.players);
-      this.hasRecord = false;
+      
       this.avgSpeed = this.typingTotalLetters / this.typingTotalTime * 1000;
       var that = this;
+      that.hasRecord = false;
       var index = 0;
+      var playerIndex = 0;
       this.players.forEach(function(player){
-        index += 1;
         if(player.name === that.player.name){
           that.hasRecord = true;
           if(that.currentScore > player.topScore){
             that.player.topScore = that.currentScore;
           }else{that.player.topScore = player.topScore;}
           if(that.avgSpeed > player.avgSpeed){
-            that.player.avgSpeed = player.avgSpeed;
+            that.player.avgSpeed = that.avgSpeed;
           }else{that.player.avgSpeed = player.avgSpeed;}
           that.player.nowSpeed = player.avgSpeed;
           that.player.nowScore = player.currentScore;
-          that.players.splice(index,1);
-          that.players.push(that.player);
+          playerIndex = index;
         }
+        index += 1;
       });
-      if(!this.hasRecord){
+      if(that.hasRecord){
+        this.players.splice(playerIndex,1);
+        this.players.push(that.player);
+      }else{
         this.player.topScore = this.currentScore;
         this.player.nowScore = this.currentScore;
         this.player.avgSpeed = this.avgSpeed;
         this.player.nowSpeed = this.avgSpeed;
         this.players.push(this.player);
-
       }
+
+      console.log(localStorage.getItem('players'));
+      if(localStorage.getItem('players') !== null){
+        localStorage.removeItem("players");
+      }
+      console.log(localStorage.getItem('players'));
       localStorage.setItem('players', JSON.stringify(this.players));
+      console.log(localStorage.getItem('players'));
     }
     location.href='#index-view';
   },
