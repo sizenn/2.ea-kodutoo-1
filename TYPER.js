@@ -75,6 +75,8 @@ TYPER.prototype = {
 		this.canvas.width = this.WIDTH;
 		this.canvas.height = this.HEIGHT;
 
+    this.updateHighScores();
+
     window.addEventListener('hashchange', this.routeChange.bind(this));
     if(!window.location.hash){
       window.location.hash = 'index-view';
@@ -180,6 +182,7 @@ TYPER.prototype = {
     if(this.timerMultiplier <= 0){
       console.log("game ended");
       this.endGame();
+      this.updateHighScores();
     }else{
       this.ctx2.clearRect( 0, 0, this.canvas2.width, this.canvas2.height);
       this.ctx2.fillStyle="red";
@@ -213,6 +216,7 @@ TYPER.prototype = {
       this.players = JSON.parse(localStorage.players);
       
       this.avgSpeed = this.typingTotalLetters / this.typingTotalTime * 1000;
+      this.avgSpeed = +this.avgSpeed.toFixed(2);
       var that = this;
       that.hasRecord = false;
       var index = 0;
@@ -247,12 +251,53 @@ TYPER.prototype = {
       if(localStorage.getItem('players') !== null){
         localStorage.removeItem("players");
       }
+      this.players.sort(function(obj1, obj2) {
+        return obj2.score - obj1.score;
+    });
       console.log(localStorage.getItem('players'));
       localStorage.setItem('players', JSON.stringify(this.players));
       console.log(localStorage.getItem('players'));
     }
     location.href='#index-view';
   },
+
+  updateHighScores: function(){
+    if(localStorage.players){
+      var scoreDiv = document.getElementById('scoreDiv');
+      while (scoreDiv.hasChildNodes()) {
+        scoreDiv.removeChild(scoreDiv.lastChild);
+      }
+      var speedDiv = document.getElementById('speedDiv');
+      while (speedDiv.hasChildNodes()) {
+        speedDiv.removeChild(speedDiv.lastChild);
+      }
+      var nameDiv = document.getElementById('nameDiv');
+      while (nameDiv.hasChildNodes()) {
+        nameDiv.removeChild(nameDiv.lastChild);
+      }
+    
+      this.players = JSON.parse(localStorage.players);
+      var divId = 1;
+      while(divId < 6){
+        this.players.forEach(function(player){
+          var name = document.createElement('h3');
+          var score = document.createElement('h3');
+          var speed = document.createElement('h3');
+          var newName = document.createTextNode(player.name); 
+          var newScore = document.createTextNode(player.topScore); 
+          var newSpeed = document.createTextNode(player.avgSpeed); 
+          name.appendChild(newName);
+          score.appendChild(newScore);
+          speed.appendChild(newSpeed);
+          nameDiv.appendChild(name);
+          scoreDiv.appendChild(score);
+          speedDiv.appendChild(speed);
+          divId += 1;
+        });
+      }
+    }
+  },
+
 	start: function(){
 
 		// Tekitame sõna objekti Word

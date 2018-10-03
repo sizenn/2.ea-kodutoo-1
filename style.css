@@ -54,10 +54,26 @@ canvas {
 .left {
   width: 65%;
   left: 0;
-  margin-left: 15px;
+  margin-left: 3%;
 }
 .right {
   width: 35%;
   right: 0;
   margin-right: 5%;
+}
+
+.scoreleft {
+  float: left;
+  margin-left: 8%;
+  margin-right: 8%;
+}
+.scorecenter {
+  float: center;
+  margin-right: 8%;
+  margin-left: 8%;
+}
+.scoreright {
+  float: right;
+  margin-left: 8%;
+  margin-right: 8%;
 }
