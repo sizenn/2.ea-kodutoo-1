@@ -251,9 +251,7 @@ TYPER.prototype = {
       if(localStorage.getItem('players') !== null){
         localStorage.removeItem("players");
       }
-      this.players.sort(function(obj1, obj2) {
-        return obj2.score - obj1.score;
-    });
+      
       console.log(localStorage.getItem('players'));
       localStorage.setItem('players', JSON.stringify(this.players));
       console.log(localStorage.getItem('players'));
@@ -263,38 +261,39 @@ TYPER.prototype = {
 
   updateHighScores: function(){
     if(localStorage.players){
+
+
+      //////////////////FIX MEEEEEEEEE
+      localStorage.players.sort(function(obj1, obj2) {
+        return obj2.score - obj1.score;
+      });
       var scoreDiv = document.getElementById('scoreDiv');
       while (scoreDiv.hasChildNodes()) {
         scoreDiv.removeChild(scoreDiv.lastChild);
       }
-      var speedDiv = document.getElementById('speedDiv');
-      while (speedDiv.hasChildNodes()) {
-        speedDiv.removeChild(speedDiv.lastChild);
-      }
-      var nameDiv = document.getElementById('nameDiv');
-      while (nameDiv.hasChildNodes()) {
-        nameDiv.removeChild(nameDiv.lastChild);
-      }
     
       this.players = JSON.parse(localStorage.players);
       var divId = 1;
-      while(divId < 6){
-        this.players.forEach(function(player){
-          var name = document.createElement('h3');
-          var score = document.createElement('h3');
-          var speed = document.createElement('h3');
-          var newName = document.createTextNode(player.name); 
-          var newScore = document.createTextNode(player.topScore); 
-          var newSpeed = document.createTextNode(player.avgSpeed); 
-          name.appendChild(newName);
-          score.appendChild(newScore);
-          speed.appendChild(newSpeed);
-          nameDiv.appendChild(name);
-          scoreDiv.appendChild(score);
-          speedDiv.appendChild(speed);
+      this.players.forEach(function(player){
+        if(divId < 11){ 
+          var stats = document.createElement('tr');
+          stats.classList.add('score'+divId);
+          var stat1 = document.createElement('th');
+          var stat2 = document.createElement('th');
+          var stat3 = document.createElement('th');
+          var text1 = document.createTextNode(player.name);
+          var text2 = document.createTextNode(player.topScore);
+          var text3 = document.createTextNode(player.avgSpeed);
+          stat1.appendChild(text1);
+          stat2.appendChild(text2);
+          stat3.appendChild(text3);
+          stats.appendChild(stat1);
+          stats.appendChild(stat2);
+          stats.appendChild(stat3);
+          scoreDiv.appendChild(stats);
           divId += 1;
-        });
-      }
+        }
+      });
     }
   },
 

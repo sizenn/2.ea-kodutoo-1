@@ -39,9 +39,6 @@ input[type="button"] {
 canvas {
     z-index: 0;
 }
-
-
-
 .split {
   height: 100%;
   
@@ -61,19 +58,15 @@ canvas {
   right: 0;
   margin-right: 5%;
 }
-
-.scoreleft {
-  float: left;
-  margin-left: 8%;
-  margin-right: 8%;
+th {
+  float: middle;
+  padding: 0, 10px, 5px;
+  line-height: 25px;
+  border: 1px solid black;
+  width: 33.333333333%;
 }
-.scorecenter {
-  float: center;
-  margin-right: 8%;
-  margin-left: 8%;
-}
-.scoreright {
-  float: right;
-  margin-left: 8%;
-  margin-right: 8%;
+table{
+  margin-right: 20%;
+  border: 1px solid black;
+  width:100%;
 }
