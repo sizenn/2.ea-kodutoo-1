@@ -63,7 +63,6 @@ TYPER.prototype = {
     this.ctx2 = this.canvas2.getContext('2d');
 		// canvase laius ja kõrgus veebisirvija akna suuruseks (nii style, kui reso)
     this.canvas2.style.width = this.WIDTH + 'px';
-    //this.canvas2.style.height = this.HEIGHT/5*2 + 'px';
     this.canvas2.style.height = this.HEIGHT + 'px';
 		this.canvas.style.width = this.WIDTH + 'px';
 		this.canvas.style.height = this.HEIGHT + 'px';
@@ -180,7 +179,6 @@ TYPER.prototype = {
       this.timerMultiplier = 1.00;
     }
     if(this.timerMultiplier <= 0){
-      console.log("game ended");
       this.endGame();
       this.updateHighScores();
     }else{
@@ -214,7 +212,6 @@ TYPER.prototype = {
     }
     if(localStorage.players){
       this.players = JSON.parse(localStorage.players);
-      
       this.avgSpeed = this.typingTotalLetters / this.typingTotalTime * 1000;
       this.avgSpeed = +this.avgSpeed.toFixed(2);
       var that = this;
@@ -247,14 +244,11 @@ TYPER.prototype = {
         this.players.push(this.player);
       }
 
-      console.log(localStorage.getItem('players'));
       if(localStorage.getItem('players') !== null){
         localStorage.removeItem("players");
       }
       
-      console.log(localStorage.getItem('players'));
       localStorage.setItem('players', JSON.stringify(this.players));
-      console.log(localStorage.getItem('players'));
     }
     location.href='#index-view';
   },
@@ -262,17 +256,18 @@ TYPER.prototype = {
   updateHighScores: function(){
     if(localStorage.players){
 
-
-      //////////////////FIX MEEEEEEEEE
-      localStorage.players.sort(function(obj1, obj2) {
-        return obj2.score - obj1.score;
+      this.players = JSON.parse(localStorage.players);
+      this.players = this.players.sort(function(a, b) {
+        return a.topScore - b.topScore;
       });
+      localStorage.removeItem("players");
+      localStorage.setItem('players', JSON.stringify(this.players));
+
       var scoreDiv = document.getElementById('scoreDiv');
       while (scoreDiv.hasChildNodes()) {
         scoreDiv.removeChild(scoreDiv.lastChild);
       }
     
-      this.players = JSON.parse(localStorage.players);
       var divId = 1;
       this.players.forEach(function(player){
         if(divId < 11){ 
@@ -302,11 +297,9 @@ TYPER.prototype = {
 		// Tekitame sõna objekti Word
     this.typingAvgTime = 0;
     this.typingStartTime = Date.now();
-    console.log(this.typingStartTime);
     this.typingTotalTime = 0;
     this.typingTotalLetters = 0;
 		this.generateWord();
-		//console.log(this.word);
 
         //joonista sõna
 		this.word.Draw();
@@ -317,7 +310,6 @@ TYPER.prototype = {
     // kui pikk peab sõna tulema, + min pikkus + äraarvatud sõnade arvul jääk 5 jagamisel
     // iga viie sõna tagant suureneb sõna pikkus ühe võrra
     var generated_word_length =  this.word_min_length + parseInt(this.guessed_words/5);
-    console.log(generated_word_length);
     // Saan suvalise arvu vahemikus 0 - (massiivi pikkus -1)
     var random_index = (Math.random()*(this.words[generated_word_length].length-1)).toFixed();
 
@@ -337,7 +329,6 @@ TYPER.prototype = {
 		// Võrdlen kas meie kirjutatud täht on sama mis järele jäänud sõna esimene
 		//console.log(this.word);
 		if(letter === this.word.left.charAt(0)){
-      console.log(this.word);
       this.timerMultiplier += 0.01;
       this.currentScore += 1;
 			// Võtame ühe tähe maha
@@ -362,7 +353,6 @@ TYPER.prototype = {
 			//joonistan uuesti
 			this.word.Draw();
 		}else{
-      console.log(this.word);
       this.timerMultiplier -= 0.02;
       this.currentScore -= 2;
       this.screenFlash();
