@@ -4,13 +4,13 @@ Autor: Rasmus Kivipõld
 
 Rakenduse protsessi flowd näeb:  skeem.png
 
-##Lisatud funktsionaalsus:
+## Lisatud funktsionaalsus:
 Tiksub aeg, mida tähistab red-green bar arvatava sõna üleval. Kui tähe õigesti kirjutad saad aega juurde ja kui tähe valesti kirjutad läheb aega maha.
 Mida rohkem sõnu arvatud on, seda kiiremini aeg tiksuma hakkab (this.tickSpeed = 500 - (parseInt(this.guessed_words / 5) * 30))
 Kui kirjutad mingi tähe valesti, siis vilgub rakenduse äär punaselt.
 Mäng lõppeb kui aeg otsa saab, skoor salvestatakse localStoragesse.
 
-##Skoori arvutamine:
+## Skoori arvutamine:
 Tähe õigesti kirjutamisel tuleb this.currentScore += 1
 Tähe valesti kirjutamisel läheb this.currentScore -= 2
 
